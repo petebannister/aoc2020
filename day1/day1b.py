@@ -7,4 +7,4 @@ for a in data:
         for c in data:
             if (2020 == (a + b + c)):
                 print ("answer:", a * b * c)
-                exit
+                quit()
