@@ -2,12 +2,11 @@ import os
 from parse import parse
 
 sdir = os.path.dirname(os.path.realpath(__file__))
-data = open(sdir + "\\day2.txt").readlines()
+data = [line.strip() for line in open(sdir + "\\day2.txt").readlines()]
 #data = list(map(int, data))
 nvalid = 0
 for d in data:
-    (a, b, ch, pw) = parse("{}-{} {}: {}", d)
-    (a, b, ch, pw) = (int(a), int(b), ch[0], pw)
+    (a, b, ch, pw) = parse("{:d}-{:d} {}: {}", d)
     n = 0
     if (pw[a-1] == ch): n += 1
     if (pw[b-1] == ch): n += 1
