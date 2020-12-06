@@ -8,14 +8,12 @@ tot = 0
 grp = 0
 gs = set()
 for line in lines:
-	if len(line) == 0:
+	if not line:
 		tot += len(gs)
 		gs = set()
 	else:
 		for c in line:
-			if c in 'abcdefghijklmnopqrstuvwxyz':
-				gs.add(c)
+			gs.add(c)
 				
 tot += len(gs)
-assert(tot != 6518)
 print(tot)

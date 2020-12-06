@@ -9,17 +9,14 @@ ngrp = 0
 gs = [0]*26
 
 for line in lines:
-	if len(line) == 0:
+	if not line:
 		tot += gs.count(ngrp)
-		# tot += len(gs)
 		gs = [0]*26
 		ngrp = 0
 	else:
 		ngrp += 1
 		for c in line:
-			if c in 'abcdefghijklmnopqrstuvwxyz':
-				gs[ord(c) - ord('a')] += 1
+			gs[ord(c) - ord('a')] += 1
 				
 tot += gs.count(ngrp)
-#assert(tot != 6518)
 print(tot)
