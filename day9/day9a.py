@@ -1,6 +1,4 @@
 import os
-from enum import IntEnum
-import copy
 
 sdir = os.path.dirname(os.path.realpath(__file__))
 input = [int(line) for line in open(sdir + "/input.txt").readlines()]
@@ -9,20 +7,13 @@ test_input = [int(line) for line in open(sdir + "/test.txt").readlines()]
 p1 = 0
 p2 = 0
 
-
 def find_valid(depth, values, i):
 	v = values[i]
-	#print("i: ", i)
-	#print("v: ", v)
 	for ia in range(i-1, i-(depth + 1), -1):
 		a = values[ia]
-		#print("ia: ", ia)
-		#print("a: ", a)
 		if a < v: # optimization
 			for ib in range(ia-1, i-(depth + 1), -1):
 				b = values[ib]
-				#print("ib: ", ib)
-				#print("b: ", b)
 				if v == (a + b):
 					return True
 	return False
