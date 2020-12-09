@@ -12,8 +12,6 @@ class CC(IntEnum):
 	jmp = 3
 
 class Ins:
-	cc = CC.term
-	arg = 0
 	def __init__(self, acc, aarg):
 		self.cc = acc
 		self.arg = aarg
