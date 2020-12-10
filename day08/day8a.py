@@ -1,5 +1,4 @@
 import os
-from enum import IntEnum
 import copy
 
 sdir = os.path.dirname(os.path.realpath(__file__))
@@ -9,7 +8,7 @@ class VM:
 	def __init__(self):
 		self.code = []
 		self.reset()
-		
+
 	def reset(self):
 		self.i = 0
 		self.a = 0
