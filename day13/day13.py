@@ -30,6 +30,10 @@ def gcd(a, b):
         a, b = b, a%b
     return a
 
+def lcm(a, b):
+	return (a * b) // gcd(a, b)
+
+
 def test_p2(buses, timestamp):
 	for i in range(0,len(buses)):
 		bus = buses[i]
@@ -42,52 +46,26 @@ def test_p2(buses, timestamp):
 def part2(input):
 	buses = input[1].split(',')
 	m = 1
-	hi = 1
-	ho = 0
 	assert(buses[0] != 'x')
-	a = int(buses[0])
-	periods = [a]
-	offsets = [0]
+	period = int(buses[0])
+	offset = 0
 	for i in range(1,len(buses)):
 		bus = buses[i]
 		if bus == 'x':
 			continue
 		bus = int(bus)
-		period = (a * bus) // gcd(a, bus)
-		offset = 0
-		p = period
-		while (((p - i) % a) != 0):
-			p -= bus
-			offset += bus
-			assert(p > 0)
-		periods.append(period)
-		offsets.append(offset)
-		m = (m * period) // gcd(m, period)
-		if (bus > hi):
-			hi = bus
-			ho = i
+		for k in range(1, bus):
+			if 0 == (((k * period) + (offset + i)) % bus):
+				offset += k * period
+				period = lcm(period, bus)
+				print("period: ", period)
+				print("offset: ", offset)
+				break
 
-	#(buses, 1068781)
+	print("offset:", offset)
 
-	print("m:", m)
-
-	#assert(test_p2(buses, 1068781))
-
-	#for p in range(0, m, a):
-	#	if (test_p2(buses, p)):
-	#		return p
-
-	for k in range(m, 0, -hi):
-		if (test_p2(buses, k - ho)):
-			return k - ho
-		if (k % (100000 * hi) == 0):
-			print(k - ho)
-	assert(False)
-	#print(periods)
-	#print(offsets)
-	#print(m - o)
-
-	return 0
+	assert(test_p2(buses, offset))
+	return offset
 
 
 t = part1(test)
