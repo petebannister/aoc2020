@@ -18,22 +18,14 @@ for line in lines:
 	if ins == 'mask':
 		mask_and = 0
 		mask_or = 0
-		addr_mask_and = 0
-		addr_mask_or = 0
 		dmac = []
 		for i, ch in enumerate(val):
 			mask_and <<= 1
 			mask_or <<= 1
-			addr_mask_or <<= 1
-			addr_mask_and <<= 1
 			if (ch == '1'):
 				mask_and += 1
 				mask_or += 1
-				addr_mask_or += 1
-				addr_mask_and += 1
-			elif (ch == '0'):
-				addr_mask_and += 1
-			else:
+			elif (ch != '0'):
 				mask_and += 1
 
 			if (ch == 'X'):
@@ -42,11 +34,10 @@ for line in lines:
 	elif str(ins).startswith('mem'):
 		index = int(ins.split('[')[1].split(']')[0])
 		val = int(val)
-		modval = (val & mask_and) | mask_or
-		mem[index] = modval		
+		mem[index] = (val & mask_and) | mask_or		
 
 		# pt 2
-		addr = (index & addr_mask_and) | addr_mask_or
+		addr = (index & ~mask_and) | mask_or
 		for k in range(0, 1 << len(dmac)):
 			dynamic_mask = 0
 			for bit in range(0, len(dmac)):
@@ -61,5 +52,4 @@ print(p1)
 print(p2)
 
 assert(p1 == 15172047086292)
-assert(p2 != 359196893820312)
-assert(p2 != 440312505658016)
+assert(p2 == 4197941339968)
