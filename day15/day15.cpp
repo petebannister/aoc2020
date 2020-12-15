@@ -12,26 +12,17 @@ void output(T v) {
 }
 
 
-uint32_t get_up_to(std::initializer_list<uint32_t> const& numbers, uint64_t lim)
+uint32_t get_up_to(std::initializer_list<uint32_t> const& numbers, uint32_t lim)
 {
-	std::vector<uint64_t> times(lim);
-	uint64_t* p = &times[0];
-	//std::unordered_map<uint32_t, uint64_t> times(lim); // / 16);
-	uint64_t time = 0;
+	std::vector<uint32_t> times(lim);
+	uint32_t* p = &times[0];
+	uint32_t time = 0;
 	uint32_t n;
 	for (; time < numbers.size(); ++time) {
 		n = numbers.begin()[time]; 
-		times[n] = time + 1;
+		p[n] = time + 1;
 	}
-	for (; time < (lim); ++time) { // lim -1?	
-		//if (0 == (time & 0x0FFFFF)) {
-			//output(time);
-		//}
-		//auto const last = n;
-		if (n > times.size()) {
- 			times.resize(n * 2);
-			p = &times[0];
-		}
+	for (; time < (lim); ++time) {
 		auto& found = p[n];
 		auto f = found;
 		if (f == 0) {
