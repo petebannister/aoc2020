@@ -14,30 +14,34 @@ void output(T v) {
 
 uint32_t get_up_to(std::initializer_list<uint32_t> const& numbers, uint64_t lim)
 {
-	std::vector<uint64_t> times(1000000);
+	std::vector<uint64_t> times(lim);
+	uint64_t* p = &times[0];
 	//std::unordered_map<uint32_t, uint64_t> times(lim); // / 16);
 	uint64_t time = 0;
 	uint32_t n;
 	for (; time < numbers.size(); ++time) {
-		n = numbers.begin()[time];
+		n = numbers.begin()[time]; 
 		times[n] = time + 1;
 	}
 	for (; time < (lim); ++time) { // lim -1?	
-		if (0 == (time & 0x0FFFFF)) {
-			output(time);
-		}
-		auto const last = n;
+		//if (0 == (time & 0x0FFFFF)) {
+			//output(time);
+		//}
+		//auto const last = n;
 		if (n > times.size()) {
-			times.resize(n + 1);
+ 			times.resize(n * 2);
+			p = &times[0];
 		}
-		auto found = times[n];
-		if (found == 0) {
+		auto& found = p[n];
+		auto f = found;
+		if (f == 0) {
 			n = 0;
 		}
 		else {
-			n = static_cast<uint32_t>(time - found);
+			n = static_cast<uint32_t>(time - f);
 		}
-		times[last] = time;
+		found = time;
+		//times[last] = time;
 	}
 	return n;
 }
