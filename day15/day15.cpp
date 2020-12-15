@@ -2,8 +2,7 @@
 #include <cassert>
 #include <cstdint>
 #include <iostream>
-#include <unordered_map>
-#include <deque>
+#include <cstring>
 #include <ctime>
 
 template <typename T>
@@ -14,25 +13,26 @@ void output(T v) {
 
 uint32_t get_up_to(std::initializer_list<uint32_t> const& numbers, uint32_t lim)
 {
-	std::vector<uint32_t> times(lim);
-	uint32_t* p = &times[0];
+	std::unique_ptr<uint32_t[]> times_data(new uint32_t[lim]);
+	uint32_t* times = times_data.get();
+	memset(&times[0], 0, lim * sizeof(times[0]));
+
 	uint32_t time = 0;
 	uint32_t n;
 	for (; time < numbers.size(); ++time) {
 		n = numbers.begin()[time]; 
-		p[n] = time + 1;
+		times[n] = time + 1;
 	}
-	for (; time < (lim); ++time) {
-		auto& found = p[n];
-		auto f = found;
-		if (f == 0) {
+	for (; time < lim; ++time) {
+		auto* p_last = &times[n];
+		auto last = *p_last;
+		if (last == 0) {
 			n = 0;
 		}
 		else {
-			n = static_cast<uint32_t>(time - f);
+			n = static_cast<uint32_t>(time - last);
 		}
-		found = time;
-		//times[last] = time;
+		*p_last = time;
 	}
 	return n;
 }
