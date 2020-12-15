@@ -4,6 +4,7 @@
 #include <iostream>
 #include <unordered_map>
 #include <deque>
+#include <ctime>
 
 template <typename T>
 void output(T v) {
@@ -13,7 +14,7 @@ void output(T v) {
 
 uint32_t get_up_to(std::initializer_list<uint32_t> const& numbers, uint64_t lim)
 {
-	std::deque<uint32_t> times(4096);
+	std::vector<uint64_t> times(1000000);
 	//std::unordered_map<uint32_t, uint64_t> times(lim); // / 16);
 	uint64_t time = 0;
 	uint32_t n;
@@ -50,6 +51,10 @@ void main() {
 	//assert(p1 == 257);
 	output(p1);
 
+	auto c1 = clock();
 	auto p2 = get_up_to({0,14,6,20,1,4}, 30000000);
+	auto c2 = clock();
+	auto run_time_ms = (1000 * (c2 - c1)) / CLOCKS_PER_SEC;
 	output(p2);
+	std::cout << "run time [ms]: " << run_time_ms<< std::endl;
 }
