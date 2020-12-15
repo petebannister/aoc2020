@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <iostream>
 #include <unordered_map>
+#include <deque>
 
 template <typename T>
 void output(T v) {
@@ -12,25 +13,28 @@ void output(T v) {
 
 uint32_t get_up_to(std::initializer_list<uint32_t> const& numbers, uint64_t lim)
 {
-	std::unordered_map<uint32_t, uint64_t> times(lim/16);
+	std::deque<uint32_t> times(4096);
+	//std::unordered_map<uint32_t, uint64_t> times(lim); // / 16);
 	uint64_t time = 0;
 	uint32_t n;
 	for (; time < numbers.size(); ++time) {
 		n = numbers.begin()[time];
-		times[n] = time;
+		times[n] = time + 1;
 	}
-	--time;
-	for (; time < (lim-1); ++time) { // lim -1?	
+	for (; time < (lim); ++time) { // lim -1?	
 		if (0 == (time & 0x0FFFFF)) {
 			output(time);
 		}
 		auto const last = n;
-		auto found = times.find(n);
-		if (found == times.end()) {
+		if (n > times.size()) {
+			times.resize(n + 1);
+		}
+		auto found = times[n];
+		if (found == 0) {
 			n = 0;
 		}
 		else {
-			n = static_cast<uint32_t>(time - found->second);
+			n = static_cast<uint32_t>(time - found);
 		}
 		times[last] = time;
 	}
