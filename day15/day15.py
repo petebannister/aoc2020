@@ -21,7 +21,7 @@ def get_up_to(numbers, lim):
 		times.update({last:time})
 		time += 1
 
-		if (0 == time % 100000):
+		if (0 == time % 1000000):
 			print(time)
 		#print(time, ", ", n)
 		# 0 3 3 1 0 4 0
