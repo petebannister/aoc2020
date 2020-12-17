@@ -1,0 +1,6 @@
+cmake_minimum_required(VERSION 3.10)
+project(day17)
+set(CMAKE_CXX_STANDARD 14)
+add_executable(day17 "${CMAKE_CURRENT_LIST_DIR}/day17.cpp")
+target_compile_definitions(day17 PUBLIC -D_SECURE_SCL=0)
+target_include_directories(day17 PUBLIC ${CMAKE_CURRENT_LIST_DIR})
