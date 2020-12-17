@@ -110,6 +110,7 @@ template <> vec4 make_vec<vec4>(i32 x, i32 y) {
 template <typename V>
 auto make_grid(std::string const& input) {
 	hashset<V> grid;
+	grid.reserve(1000000);
 	i32 y = 0;
 	for (auto&& line : split(input, '\n')) {
 		i32 x = 0;
