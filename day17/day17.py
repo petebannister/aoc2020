@@ -39,14 +39,18 @@ def grid4(input):
 				grid.add((x,y,0,0))
 	return grid
 def add_coord(a, b):
-	return tuple(map(lambda i, j: i + j, a, b))
+	#return tuple(map(lambda i, j: i + j, a, b))
+	return tuple(map(sum, zip(a, b))) 
 
 def solve(grid, N, seq):
+	additions = set()
+	removals = set()
+	inactive = set()
 	for i in range(0, N):
 		print("step:", i)
-		additions = set()
-		removals = set()
-		inactive = set()
+		additions.clear()
+		removals.clear()
+		inactive.clear()
 		for coord in grid:
 			neighbors = 0
 			for dc in seq:
