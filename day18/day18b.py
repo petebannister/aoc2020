@@ -30,7 +30,7 @@ def accept(op):
 	pos += 1
 	return True
 def expect(v):
-	if not accept(v): raise "Expectation failure at " + pos
+	if not accept(v): raise "Expected '" + v + "' failure at " + pos
 def expect_term():
 	if not term(): raise "Expected term at " + pos
 
