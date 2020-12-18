@@ -33,14 +33,6 @@ def expect(v):
 	if not accept(v): raise "Expected '" + v + "' failure at " + pos
 def expect_term():
 	if not term(): raise "Expected term at " + pos
-
-# Grammar / parser:
-def group():
-	if not accept('('): return False
-	expression()
-	skip()
-	expect(')')
-	return True	
 def number():
 	global pos
 	skip()
@@ -51,12 +43,23 @@ def number():
 	if 0 == len(num): return False
 	push(int(num))
 	return True
+
+# Grammar / parser:
+def expression():
+	if not term(): return False
+	while multiply(): pass
+	return True
 def term():
 	if not factor(): return False
 	while plus(): pass
 	return True
 def factor():
 	return group() or number()
+def group():
+	if not accept('('): return False
+	expression()
+	expect(')')
+	return True	
 def multiply():
 	if not accept('*'): return False
 	expect_term()
@@ -67,11 +70,6 @@ def plus():
 	expect_term()
 	push(pop() + pop())
 	return True
-def expression():
-	if not term(): return False
-	while multiply(): pass
-	return True
-
 def evaluate(line):
 	global pos, str, stack
 	str = line
