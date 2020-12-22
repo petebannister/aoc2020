@@ -52,27 +52,60 @@ def append_winner(p0, p1, hands):
 		winner = append_hand(1, p0, p1, hands)
 	return winner
 
-visited = set()
-
 def deal(hands):
 	return (
 		pop_front(hands[0]),
 		pop_front(hands[1]))
 
-def recursive_combat(hands):
-	global visited
-	memo = str(hands)
-	if (memo in visited):
-		return 0 # player 0 wins if hands seen before
-	visited.add(memo)
+complete = False
 
-def calc_score(hand):
+def recursive_combat(hands):
+	#global complete
+	visited = set()
+	winner = -1
+	while winner < 0:
+		memo = str(hands)
+		if (memo in visited):
+			complete = True
+			return 0 # player 0 wins if hands seen before
+		visited.add(memo)
+
+		p0, p1 = deal(hands)
+		n0 = len(hands[0])
+		n1 = len(hands[1])
+		if (n0 >= p0 and n1 >= p1 and n0 > 0 and n1 > 0):
+			# crucial instruction!
+			# quantity of cards copied is equal to
+			# number drawn for that player!
+			next_hands = [
+				hands[0][:p0],
+				hands[1][:p1],
+				]
+			sub_winner = recursive_combat(next_hands)
+			winner = append_hand(sub_winner, p0, p1, hands)
+			#if complete:
+			#	return sub_winner
+		elif (p0 > p1):
+			winner = append_hand(0, p0, p1, hands)
+		else:
+			winner = append_hand(1, p0, p1, hands)
+	return winner
+
+def score(hand):
 	n = len(hand)
 	r = 0
 	for i, c in enumerate(hand):
 		r += (n - i) * hand[i]
 	return r
 
+def combat(hands):
+	winner = -1
+	while winner < 0:
+		p0, p1 = deal(hands)
+		winner = append_winner(p0, p1, hands)
+		
+	print("winner ", winner)
+	return score(hands[winner])
 
 def solve(lines):
 	r1 = 0
@@ -80,14 +113,9 @@ def solve(lines):
 	hands = load(lines)
 	print(hands)
 
-	winner = -1
-	while winner < 0:
-		p0, p1 = deal(hands)
-		winner = append_winner(p0, p1, hands)
-
-	print("winner ", winner)
-
-	r1 = calc_score(hands[winner])
+	r1 = combat(copy.deepcopy(hands))
+	w2 = recursive_combat(hands)
+	r2 = score(hands[w2])
 
 	return (r1, r2)
 
@@ -99,5 +127,6 @@ assert(t2 == 291)
 
 p1, p2 = solve(lines)
 assert(p1 == 32083)
+assert(p2 > 8345)
 print('p1:', p1)
 print('p2:', p2)
