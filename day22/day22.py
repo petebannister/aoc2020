@@ -31,6 +31,49 @@ def pop_front(hand):
 	del hand[0]
 	return f
 
+def append_hand(winner, p0, p1, hands):
+	if winner == 0:
+		hands[winner].append(p0)
+		hands[winner].append(p1)
+		if 0 == len(hands[1]):
+			return winner
+	if winner == 1:
+		hands[winner].append(p1)
+		hands[winner].append(p0)
+		if 0 == len(hands[0]):
+			return winner
+	return -1
+
+def append_winner(p0, p1, hands):
+	winner = -1
+	if (p0 > p1):
+		winner = append_hand(0, p0, p1, hands)
+	else:
+		winner = append_hand(1, p0, p1, hands)
+	return winner
+
+visited = set()
+
+def deal(hands):
+	return (
+		pop_front(hands[0]),
+		pop_front(hands[1]))
+
+def recursive_combat(hands):
+	global visited
+	memo = str(hands)
+	if (memo in visited):
+		return 0 # player 0 wins if hands seen before
+	visited.add(memo)
+
+def calc_score(hand):
+	n = len(hand)
+	r = 0
+	for i, c in enumerate(hand):
+		r += (n - i) * hand[i]
+	return r
+
+
 def solve(lines):
 	r1 = 0
 	r2 = 0
@@ -39,37 +82,22 @@ def solve(lines):
 
 	winner = -1
 	while winner < 0:
-		p0 = pop_front(hands[0])
-		p1 = pop_front(hands[1])
-		if (p0 > p1):
-			hands[0].append(p0)
-			hands[0].append(p1)
-			if 0 == len(hands[1]):
-				winner = 0
-		else:
-			hands[1].append(p1)
-			hands[1].append(p0)
-			if 0 == len(hands[0]):
-				winner = 1
+		p0, p1 = deal(hands)
+		winner = append_winner(p0, p1, hands)
 
 	print("winner ", winner)
 
-	# score. The bottom card in their deck is worth the value 
-	# of the card multiplied by 1, the second-from-the-bottom 
-	# card is worth the value of the card multiplied by 2, and so on.
-	n = len(hands[winner])
-	score = 0
-	for i, c in enumerate(hands[winner]):
-		score += (n - i) * hands[winner][i]
+	r1 = calc_score(hands[winner])
 
-	r1 = score
 	return (r1, r2)
 
 t1, t2 = solve(test)
 print('t1:', t1)
 print('t1:', t2)
 assert(t1 == 306)
+assert(t2 == 291)
 
 p1, p2 = solve(lines)
+assert(p1 == 32083)
 print('p1:', p1)
 print('p2:', p2)
