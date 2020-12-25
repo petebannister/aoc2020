@@ -53,12 +53,50 @@ def solve(lines):
 		if v == black:
 			r1 += 1
 
+	# Conway the sh*t out of it
+	dirs = ins.values()
+	for i in range(0, 100):
+		print(i)
+		# expand - could improve speed by only adding those we need to
+		newtiles = set()
+		flip = set()
+		for coord in tiles.keys():
+			for d in dirs:
+				chk = (coord[0] + d[0], coord[1] + d[1])
+				if chk not in tiles:
+					newtiles.add(chk)
+		for coord in newtiles:
+			tiles[coord] = white
+		# simulate
+		for coord in tiles.keys():
+			nblack = 0
+			for d in dirs:
+				chk = (coord[0] + d[0], coord[1] + d[1])
+				if chk in tiles:
+					if tiles[chk] == black:
+						nblack = nblack + 1
+			if tiles[coord] == black:
+				if nblack == 0 or nblack > 2:
+					flip.add(coord)
+			else:
+				if nblack == 2:
+					flip.add(coord)
+		# update
+		for coord in flip:
+			tiles[coord] = not tiles[coord]
+	
+	# count black tiles (0s)
+	for v in tiles.values():
+		if v == black:
+			r2 += 1
+
 	return (r1, r2)
 
 t1, t2 = solve(test)
 print('t1:', t1)
 print('t1:', t2)
 assert(t1 == 10)
+assert(t2 == 2208)
 
 p1, p2 = solve(lines)
 print('p1:', p1)
